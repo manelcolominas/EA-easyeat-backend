@@ -5,8 +5,8 @@
  * ¡Imposible que se desincronice!
  */
 
-import Organization from './Organization.example';
-import User from './User.example';
+import Organization from './organization.example';
+import User from './user.example';
 
 const ejemploUso = async () => {
     // 1. Crear una organización
@@ -18,14 +18,14 @@ const ejemploUso = async () => {
 
     // 3. OBTENER LA ORGANIZACIÓN CON SUS USUARIOS (Sin haberlos guardado en el array)
     // Usamos .populate('nombreDeLaVirtual')
-    const orgConUsuarios = await Organization.findById(org._id).populate('misUsuarios');
+    const orgWithUsers = await Organization.findById(org._id).populate('myUsers');
     
-    console.log(orgConUsuarios);
+    console.log(orgWithUsers);
     /** El objeto devuelto se vería algo así:
     {
         _id: "...",
         name: "Google",
-        misUsuarios: [
+        myUsers: [
             { _id: "...", name: "Pol", organization: "..." },
             { _id: "...", name: "Juan", organization: "..." }
         ]

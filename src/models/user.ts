@@ -1,20 +1,20 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-export interface IUsuario {
+export interface IUser {
     name: string;
     email: string;
     password: string;
-    organizacion: mongoose.Types.ObjectId | string;
+    organization: mongoose.Types.ObjectId | string;
 }
 
-export interface IUsuarioModel extends IUsuario, Document {}
+export interface IUserModel extends IUser, Document {}
 
-const UsuarioSchema: Schema = new Schema(
+const UserSchema: Schema = new Schema(
     {
         name: { type: String, required: true },
         email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
-        organizacion: { type: Schema.Types.ObjectId, required: true, ref: 'Organizacion' }
+        organization: { type: Schema.Types.ObjectId, required: true, ref: 'Organization' }
     },
     {
         timestamps: true,
@@ -22,4 +22,4 @@ const UsuarioSchema: Schema = new Schema(
     }
 );
 
-export default mongoose.model<IUsuarioModel>('Usuario', UsuarioSchema);
+export default mongoose.model<IUserModel>('User', UserSchema);

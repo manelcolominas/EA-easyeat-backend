@@ -8,7 +8,7 @@ const options: Options = {
     info: {
       title: 'EA Sem5 API',
       version: '1.0.0',
-      description: 'API REST de Organizaciones y Usuarios',
+      description: 'REST API for Organizations and Users',
     },
     servers: [
       {
@@ -17,7 +17,7 @@ const options: Options = {
     ],
   },
 
-  // IMPORTANTE: leer los .js compilados en build/routes
+  // IMPORTANT: read the compiled .js files in build/routes
   apis: [path.join(__dirname, 'routes', '*.js')],
 };
 

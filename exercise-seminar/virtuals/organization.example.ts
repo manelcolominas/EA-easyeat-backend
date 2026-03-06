@@ -19,7 +19,7 @@ const OrganizationSchema: Schema = new Schema(
  * CAMPO VIRTUAL: "dondeEstanMisUsuarios"
  * No se guarda en la DB, pero Mongoose lo calcula al hacer .populate()
  */
-OrganizationSchema.virtual('misUsuarios', {
+OrganizationSchema.virtual('myUsers', {
     ref: 'User',            // El modelo que queremos buscar
     localField: '_id',      // Mi campo (ID de Organización)
     foreignField: 'organization', // El campo en el Usuario que me referencia

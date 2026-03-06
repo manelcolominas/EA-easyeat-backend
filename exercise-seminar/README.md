@@ -9,7 +9,8 @@ Para completar el seminario con éxito, debes cumplir estos **4 puntos**:
 
 1.  **[ ] Definir la Relación**: Haz que el modelo `Organizacion` sepa quiénes son sus `Usuarios`.
 2.  **[ ] Poblar Datos (Populate)**: Haz que al listar organizaciones (`GET /organizaciones`), aparezca la información de sus usuarios.
-3.  **[ ] Crear Nuevo Endpoint**: Implementa `GET /organizaciones/:id/usuarios` para filtrar usuarios por empresa.
+3.  **[ ] Crear Nuevo Endpoint**: Implementa `GET /organizations/:id/
+4. usuarios` para filtrar usuarios por empresa.
 4.  **[ ] Documentar**: Todo el código nuevo debe estar reflejado en **Swagger** (`/api`).
 
 ---
@@ -42,7 +43,7 @@ Mongoose busca los usuarios "al vuelo" basándose en el ID de la organización. 
 
 ## 🔥 El Gran Reto: Nuevo Endpoint
 Debes crear un endpoint específico:
-### `GET /organizaciones/:organizacionId/usuarios`
+### `GET /organizations/:organizationId/usuarios`
 
 **Requisitos obligatorios:**
 1. **Lógica**: Implementar la función en el controlador y definir la ruta.
@@ -52,10 +53,10 @@ Debes crear un endpoint específico:
 ---
 
 ## 📂 Archivos clave a modificar
-- 📄 `src/models/Organizacion.ts`: Para definir la relación (ya sea virtual o por array).
-- 📄 `src/services/Organizacion.ts`: Para añadir la lógica de negocio y filtros.
-- 📄 `src/controllers/Organizacion.ts`: Para recibir la petición y llamar al servicio.
-- 📄 `src/routes/Organizacion.ts`: Para registrar la nueva ruta y su documentación Swagger.
+- 📄 `src/models/organization.ts`: Para definir la relación (ya sea virtual o por array).
+- 📄 `src/services/organization.ts`: Para añadir la lógica de negocio y filtros.
+- 📄 `src/controllers/organization.ts`: Para recibir la petición y llamar al servicio.
+- 📄 `src/routes/organization.ts`: Para registrar la nueva ruta y su documentación Swagger.
 
 ---
 

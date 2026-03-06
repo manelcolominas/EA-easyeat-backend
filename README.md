@@ -1,199 +1,198 @@
 # Express API — Mongoose + TypeScript In Depth
 
-API REST construida con **Node.js**, **Express**, **TypeScript** y **Mongoose** que gestiona dos entidades principales: `Organizacion` y `Usuario`.
+REST API built with **Node.js**, **Express**, **TypeScript**, and **Mongoose** that manages two main entities: `Organization` and `User`.
 
 ---
 
-## Tecnologías
+## Technologies
 
-| Paquete | Versión | Uso |
+| Package | Version | Usage |
 |---|---|---|
-| express | ^4.17.3 | Framework HTTP |
-| mongoose | ^6.13.9 | ODM para MongoDB |
-| joi | ^17.6.0 | Validación de esquemas en peticiones |
-| dotenv | ^16.0.0 | Variables de entorno |
-| cors | ^2.8.6 | Política de acceso cruzado |
-| chalk | ^4.1.2 | Logging con color en consola |
-| typescript | ^4.5.5 | Tipado estático (devDependency) |
+| express | ^4.17.3 | HTTP Framework |
+| mongoose | ^6.13.9 | ODM for MongoDB |
+| joi | ^17.6.0 | Schema validation in requests |
+| dotenv | ^16.0.0 | Environment variables |
+| cors | ^2.8.6 | Cross-origin access policy |
+| chalk | ^4.1.2 | Color logging in console |
+| typescript | ^4.5.5 | Static typing (devDependency) |
 
 ---
 
-## Estructura del proyecto
+## Project Structure
 
 ```
 src/
-├── server.ts              # Punto de entrada: conexión a Mongo e inicio del servidor
-├── swagger.ts              # Configuración del swagger
+├── server.ts              # Entry point: Mongo connection and server start
+├── swagger.ts             # Swagger configuration
 ├── config/
-│   └── config.ts          # Configuración de variables de entorno (Mongo + puerto)
+│   └── config.ts          # Environment variable configuration (Mongo + port)
 ├── library/
-│   └── Logging.ts         # Utilidad de logging con colores (INFO / WARN / ERROR)
+│   └── logging.ts         # Logging utility with colors (INFO / WARN / ERROR)
 ├── middleware/
-│   └── Joi.ts             # Validación de payloads con Joi + schemas de cada entidad
+│   └── joi.ts             # Payload validation with Joi + schemas for each entity
 ├── models/
-│   ├── Organizacion.ts    # Esquema/Modelo Mongoose de Organizacion
-│   └── Usuario.ts         # Esquema/Modelo Mongoose de Usuario
+│   ├── organization.ts    # Mongoose Schema/Model for Organization
+│   └── user.ts            # Mongoose Schema/Model for User
 ├── controllers/
-│   ├── Organizacion.ts    # Lógica CRUD de Organizacion
-│   └── Usuario.ts         # Lógica CRUD de Usuario
+│   ├── organization.ts    # CRUD logic for Organization
+│   └── user.ts            # CRUD logic for User
 └── routes/
-    ├── Organizacion.ts    # Definición de rutas de Organizacion
-    └── Usuario.ts         # Definición de rutas de Usuario
+    ├── organization.ts    # Route definitions for Organization
+    └── user.ts            # Route definitions for User
 ```
 
 ---
 
-## Descripción de cada archivo
+## File Descriptions
 
 ### `src/server.ts`
-Punto de entrada de la aplicación. Se encarga de:
-1. Conectar a MongoDB mediante Mongoose.
-2. Si la conexión es exitosa, inicia el servidor HTTP.
-3. Registra middlewares globales: logging de peticiones/respuestas, CORS, body parsers.
-4. Monta las rutas bajo los prefijos `/organizaciones` y `/usuarios`.
-5. Expone un healthcheck en `GET /ping`.
-6. Gestiona respuestas 404 para rutas no encontradas.
+Application entry point. It is responsible for:
+1. Connecting to MongoDB using Mongoose.
+2. If the connection is successful, it starts the HTTP server.
+3. Registers global middlewares: request/response logging, CORS, body parsers.
+4. Mounts routes under the prefixes `/organizations` and `/users`.
+5. Exposes a healthcheck at `GET /ping`.
+6. Manages 404 responses for non-existent routes.
 
 ---
 
 ### `src/config/config.ts`
-Lee las variables de entorno mediante `dotenv` y exporta el objeto `config` con dos secciones:
-- `mongo.url` — URI de conexión a MongoDB.
-- `server.port` — Puerto del servidor HTTP (por defecto `1337`).
+Reads environment variables using `dotenv` and exports the `config` object with two sections:
+- `mongo.url` — MongoDB connection URI.
+- `server.port` — HTTP server port (default `1337`).
 
 ---
 
-### `src/library/Logging.ts`
-Clase estática `Logging` con tres métodos de salida en consola, cada uno con un color diferente gracias a `chalk`:
-| Método | Color | Uso |
+### `src/library/logging.ts`
+Static class `Logging` with three console output methods, each with a different color thanks to `chalk`:
+| Method | Color | Usage |
 |---|---|---|
-| `Logging.info()` | Azul | Información general |
-| `Logging.warning()` | Amarillo | Advertencias |
-| `Logging.error()` | Rojo | Errores |
+| `Logging.info()` | Blue | General information |
+| `Logging.warning()` | Yellow | Warnings |
+| `Logging.error()` | Red | Errors |
 
 ---
 
-### `src/middleware/Joi.ts`
-Contiene dos exportaciones:
+### `src/middleware/joi.ts`
+Contains two exports:
 
-- **`ValidateJoi(schema)`** — Middleware de orden superior que recibe un esquema Joi, valida el `req.body` y, si falla, devuelve `422 Unprocessable Entity`.
-- **`Schemas`** — Objeto con los esquemas de validación de cada entidad:
-  - `Schemas.organizacion.create` / `.update` → valida `{ name: string }`.
-  - `Schemas.usuario.create` / `.update` → valida `{ name: string, email: string, password: string (min 6), organizacion: ObjectId (24 hex) }`.
+- **`ValidateJoi(schema)`** — Higher-order middleware that receives a Joi schema, validates `req.body`, and, if it fails, returns `422 Unprocessable Entity`.
+- **`Schemas`** — Object with validation schemas for each entity:
+  - `Schemas.organization.create` / `.update` → validates `{ name: string }`.
+  - `Schemas.user.create` / `.update` → validates `{ name: string, email: string, password: string (min 6), organization: ObjectId (24 hex) }`.
 
 ---
 
-### `src/models/Organizacion.ts`
-Define el modelo Mongoose `Organizacion` con la siguiente estructura:
+### `src/models/organization.ts`
+Defines the Mongoose model `Organization` with the following structure:
 
-| Campo | Tipo | Requerido |
+| Field | Type | Required |
 |---|---|---|
-| `_id` | ObjectId | Sí (auto) |
-| `name` | String | Sí |
+| `_id` | ObjectId | Yes (auto) |
+| `name` | String | Yes |
 
-Interfaces TypeScript exportadas: `IOrganizacion`, `IOrganizacionModel`.
+Exported TypeScript interfaces: `IOrganization`, `IOrganizationModel`.
 
 ---
 
-### `src/models/Usuario.ts`
-Define el modelo Mongoose `Usuario` con la siguiente estructura:
+### `src/models/user.ts`
+Defines the Mongoose model `User` with the following structure:
 
-| Campo | Tipo | Requerido | Notas |
+| Field | Type | Required | Notes |
 |---|---|---|---|
-| `_id` | ObjectId | Sí (auto) | |
-| `name` | String | Sí | |
-| `email` | String | Sí | Único |
-| `password` | String | Sí | |
-| `organizacion` | ObjectId | Sí | Referencia a `Organizacion` |
-| `createdAt` | Date | Auto | Generado por `timestamps: true` |
-| `updatedAt` | Date | Auto | Generado por `timestamps: true` |
+| `_id` | ObjectId | Yes (auto) | |
+| `name` | String | Yes | |
+| `email` | String | Yes | Unique |
+| `password` | String | Yes | |
+| `organization` | ObjectId | Yes | Reference to `Organization` |
+| `createdAt` | Date | Auto | Generated by `timestamps: true` |
+| `updatedAt` | Date | Auto | Generated by `timestamps: true` |
 
-Interfaces TypeScript exportadas: `IUsuario`, `IUsuarioModel`.
-
----
-
-### `src/services/Organizacion.ts` y `src/services/Usuario.ts`
-Contienen la **lógica de negocio** y las llamadas directas a Mongoose. Es la capa encargada de interactuar con la persistencia de datos.
-
+Exported TypeScript interfaces: `IUser`, `IUserModel`.
 
 ---
 
-### `src/controllers/Organizacion.ts` y `src/controllers/Usuario.ts`
-Gestionan el protocolo HTTP. Reciben los datos del `Request`, llaman a la capa de **Service** correspondiente y devuelven la respuesta en el `Response` con el código de estado adecuado. No conocen los detalles de implementación de la base de datos.
+### `src/services/organization.ts` and `src/services/user.ts`
+Contain the **business logic** and direct calls to Mongoose. This is the layer responsible for interacting with data persistence.
 
 ---
 
-### `src/routes/Organizacion.ts` y `src/routes/Usuario.ts`
-Registran los endpoints de cada recurso con sus middlewares de validación Joi correspondientes y delegan la lógica al controlador.
+### `src/controllers/organization.ts` and `src/controllers/user.ts`
+Manage the HTTP protocol. They receive data from the `Request`, call the corresponding **Service** layer, and return the response in the `Response` with the appropriate status code. They do not know the implementation details of the database.
 
 ---
 
-## Configuración de MongoDB
+### `src/routes/organization.ts` and `src/routes/user.ts`
+Register the endpoints for each resource with their corresponding Joi validation middlewares and delegate the logic to the controller.
 
-Crea un archivo `.env` en la raíz del proyecto con el siguiente contenido:
+---
+
+## MongoDB Configuration
+
+Create a `.env` file in the project root with the following content:
 
 ```env
 MONGO_URI="mongodb://localhost:27017/sem1"
 SERVER_PORT="1337"
 ```
 
-La variable crítica es `MONGO_URI`. La base de datos usada por defecto es **`sem1`**.
+The critical variable is `MONGO_URI`. The database used by default is **`sem1`**.
 
 ---
 
-## Endpoints de la API
+## API Endpoints
 
-El servidor corre en `http://localhost:1337` por defecto. La documentación interactiva está disponible en `/api`.
+The server runs at `http://localhost:1337` by default. Interactive documentation is available at `/api`.
 
 ### General
 
-| Método | URL | Descripción |
+| Method | URL | Description |
 |---|---|---|
-| `GET` | `/ping` | Healthcheck — devuelve `{ "hello": "world" }` |
+| `GET` | `/ping` | Healthcheck — returns `{ "hello": "world" }` |
 
 ---
 
-### Organizaciones — `/organizaciones`
+### Organizations — `/organizations`
 
-| Método | URL | Body (JSON) | Validación | Descripción | Respuesta éxito |
+| Method | URL | Body (JSON) | Validation | Description | Success Response |
 |---|---|---|---|---|---|
-| `POST` | `/` | `{ "name": "string" }` | Joi required | Crea una nueva organización | `201` |
-| `GET` | `/` | — | — | Lista todas las organizaciones | `200` |
-| `GET` | `/:organizacionId` | — | — | Obtiene una organización por ID | `200` |
-| `PUT` | `/:organizacionId` | `{ "name": "string" }` | Joi required | Actualiza el nombre de una organización | `201` |
-| `DELETE` | `/:organizacionId` | — | — | Elimina una organización por ID | `201` |
+| `POST` | `/` | `{ "name": "string" }` | Joi required | Creates a new organization | `201` |
+| `GET` | `/` | — | — | Lists all organizations | `200` |
+| `GET` | `/:organizationId` | — | — | Gets an organization by ID | `200` |
+| `PUT` | `/:organizationId` | `{ "name": "string" }` | Joi required | Updates an organization's name | `201` |
+| `DELETE` | `/:organizationId` | — | — | Deletes an organization by ID | `201` |
 
 ---
 
-### Usuarios — `/usuarios`
+### Users — `/users`
 
-| Método | URL | Body (JSON) | Validación | Descripción | Respuesta éxito |
+| Method | URL | Body (JSON) | Validation | Description | Success Response |
 |---|---|---|---|---|---|
-| `POST` | `/` | `{ "name": string, "email": string, "password": password, "organizacion": "ObjectId" }` | Joi required | Crea un nuevo usuario | `201` |
-| `GET` | `/` | — | — | Lista todos los usuarios | `200` |
-| `GET` | `/:usuarioId` | — | — | Obtiene un usuario por ID (con populate de organización) | `200` |
-| `PUT` | `/:usuarioId` | `{ "name": string, ... }` | Joi required | Actualiza los datos de un usuario | `201` |
-| `DELETE` | `/:usuarioId` | — | — | Elimina un usuario por ID | `201` |
+| `POST` | `/` | `{ "name": string, "email": string, "password": password, "organization": "ObjectId" }` | Joi required | Creates a new user | `201` |
+| `GET` | `/` | — | — | Lists all users | `200` |
+| `GET` | `/:userId` | — | — | Gets a user by ID (with organization populate) | `200` |
+| `PUT` | `/:userId` | `{ "name": string, ... }` | Joi required | Updates a user's data | `201` |
+| `DELETE` | `/:userId` | — | — | Deletes a user by ID | `201` |
 
 ---
 
-## 🎓 Ejercicio de Seminario
+## 🎓 Seminar Exercise
 
-En la carpeta `ejercicio-seminario/` encontrarás material didáctico sobre cómo implementar relaciones entre modelos en Mongoose (Manual vs Virtuals). 
+In the `seminar-exercise/` folder, you will find educational material on how to implement relationships between models in Mongoose (Manual vs Virtuals).
 
 ---
 
-## Instalación y ejecución
+## Installation and Execution
 
 ```bash
-# Instalar dependencias 
+# Install dependencies
 npm install
 
-# Iniciar el servidor
+# Start the server
 npm start
 ```
 
-Para compilar manualmente:
+To compile manually:
 ```bash
 npx tsc
 ```

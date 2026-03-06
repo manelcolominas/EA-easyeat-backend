@@ -3,9 +3,9 @@ import http from 'http';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import { config } from './config/config';
-import Logging from './library/Logging';
-import organizacionRoutes from './routes/Organizacion';
-import usuarioRoutes from './routes/Usuario';
+import Logging from './library/logging';
+import organizationRoutes from './routes/organization';
+import userRoutes from './routes/user';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './swagger';
 
@@ -47,8 +47,8 @@ const StartServer = () => {
     router.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
     /** Routes */
-    router.use('/organizaciones', organizacionRoutes);
-    router.use('/usuarios', usuarioRoutes);
+    router.use('/organizations', organizationRoutes);
+    router.use('/users', userRoutes);
 
     /** Healthcheck */
     router.get('/ping', (req, res, next) => res.status(200).json({ hello: 'world' }));

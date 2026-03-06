@@ -1,0 +1,54 @@
+import { NextFunction, Request, Response } from 'express';
+import mongoose from 'mongoose';
+import OrganizationService from '../services/organization';
+
+const createOrganization = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const savedOrganization = await OrganizationService.createOrganization(req.body);
+        return res.status(201).json(savedOrganization);
+    } catch (error) {
+        return res.status(500).json({ error });
+    }
+};
+
+const readOrganization = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const organization = await OrganizationService.getOrganization(req.params.organizationId);
+        return organization ? res.status(200).json(organization) : res.status(404).json({ message: 'not found' });
+    } catch (error) {
+        return res.status(500).json({ error });
+    }
+};
+
+const readAll = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const organizations = await OrganizationService.getAllOrganizations();
+        return res.status(200).json(organizations);
+    } catch (error) {
+        return res.status(500).json({ error });
+    }
+};
+
+const updateOrganization = async (req: Request, res: Response, next: NextFunction) => {
+    const organizationId = req.params.organizationId;
+
+    try {
+        const organization = await OrganizationService.updateOrganization(organizationId, req.body);
+        return organization ? res.status(200).json(organization) : res.status(404).json({ message: 'not found' });
+    } catch (error) {
+        return res.status(500).json({ error });
+    }
+};
+
+const deleteOrganization = async (req: Request, res: Response, next: NextFunction) => {
+    const organizationId = req.params.organizationId;
+
+    try {
+        const organization = await OrganizationService.deleteOrganization(organizationId);
+        return organization ? res.status(201).json(organization) : res.status(404).json({ message: 'not found' });
+    } catch (error) {
+        return res.status(500).json({ error });
+    }
+};
+
+export default { createOrganization, readOrganization, readAll, updateOrganization, deleteOrganization };

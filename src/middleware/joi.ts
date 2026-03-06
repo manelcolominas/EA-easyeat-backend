@@ -1,8 +1,8 @@
 import Joi, { ObjectSchema } from 'joi';
 import { NextFunction, Request, Response } from 'express';
-import { IOrganizacion } from '../models/Organizacion';
-import { IUsuario } from '../models/Usuario';
-import Logging from '../library/Logging';
+import { IOrganization } from '../models/organization';
+import { IUser } from '../models/user';
+import Logging from '../library/logging';
 
 export const ValidateJoi = (schema: ObjectSchema) => {
     return async (req: Request, res: Response, next: NextFunction) => {
@@ -19,25 +19,25 @@ export const ValidateJoi = (schema: ObjectSchema) => {
 };
 
 export const Schemas = {
-    organizacion: {
-        create: Joi.object<IOrganizacion>({
+    organization: {
+        create: Joi.object<IOrganization>({
             name: Joi.string().required()
         }),
-        update: Joi.object<IOrganizacion>({
+        update: Joi.object<IOrganization>({
             name: Joi.string().required()
         })
     },
-    usuario: {
-        create: Joi.object<IUsuario>({
-            organizacion: Joi.string()
+    user: {
+        create: Joi.object<IUser>({
+            organization: Joi.string()
                 .regex(/^[0-9a-fA-F]{24}$/)
                 .required(),
             name: Joi.string().required(),
             email: Joi.string().email().required(),
             password: Joi.string().min(6).required()
         }),
-        update: Joi.object<IUsuario>({
-            organizacion: Joi.string()
+        update: Joi.object<IUser>({
+            organization: Joi.string()
                 .regex(/^[0-9a-fA-F]{24}$/)
                 .required(),
             name: Joi.string().required(),
