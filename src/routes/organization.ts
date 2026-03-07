@@ -60,6 +60,31 @@ router.post('/', ValidateJoi(Schemas.organization.create), controller.createOrga
 
 /**
  * @openapi
+ * /organizations/{id}/users:
+ *   get:
+ *     summary: Gets a single organization with populated users
+ *     tags: [Organizations]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The organization's ObjectId
+ *     responses:
+ *       200:
+ *         description: Returns the organization with populated users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Organization'
+ *       404:
+ *         description: Organization not found
+ */
+router.get('/:id/users', controller.getOrganizationWithUsers);
+
+/**
+ * @openapi
  * /organizations/{organizationId}:
  *   get:
  *     summary: Gets an organization by ID

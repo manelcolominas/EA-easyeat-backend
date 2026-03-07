@@ -3,6 +3,79 @@
 REST API built with **Node.js**, **Express**, **TypeScript**, and **Mongoose** that manages two main entities: `Organization` and `User`.
 
 ---
+## AI
+
+  ChatGPT: users: Types.ObjectId[];
+           users: [{ type: Schema.Types.ObjectId, ref: 'User' }]
+
+  Gemini:
+  const getOrganizationWithUsers = async (organizationId: string): Promise<IOrganizationModel | null> => {
+  return await Organization.findById(organizationId).populate('users', '-organization -password');
+  };
+
+  const getOrganizationWithUsers = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+  const organization = await OrganizationService.getOrganizationWithUsers(req.params.id);
+  if (!organization) {
+  return res.status(404).json({ message: 'Organization not found' });
+  }
+  return res.status(200).json(organization);
+  }
+  catch (error) {
+  return res.status(500).json({ error });
+  }
+  };
+
+[//]: # ()
+[//]: # (  /**)
+
+[//]: # (  * @openapi)
+
+[//]: # (    * /organizations/{id}/users:)
+
+[//]: # (    *   get:)
+
+[//]: # (    *     summary: Gets a single organization with populated users)
+
+[//]: # (    *     tags: [Organizations])
+
+[//]: # (    *     parameters:)
+
+[//]: # (    *       - in: path)
+
+[//]: # (    *         name: id)
+
+[//]: # (    *         required: true)
+
+[//]: # (    *         schema:)
+
+[//]: # (    *           type: string)
+
+[//]: # (    *         description: The organization's ObjectId)
+
+[//]: # (    *     responses:)
+
+[//]: # (    *       200:)
+
+[//]: # (    *         description: Returns the organization with populated users)
+
+[//]: # (    *         content:)
+
+[//]: # (    *           application/json:)
+
+[//]: # (    *             schema:)
+
+[//]: # (    *               $ref: '#/components/schemas/Organization')
+
+[//]: # (    *       404:)
+
+[//]: # (    *         description: Organization not found)
+
+[//]: # (  */)
+
+[//]: # (  router.get&#40;'/:id/users', controller.getOrganizationWithUsers&#41;;)
+
+---
 
 ## Technologies
 

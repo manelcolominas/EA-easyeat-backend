@@ -30,4 +30,8 @@ const deleteOrganization = async (organizationId: string): Promise<IOrganization
     return await Organization.findByIdAndDelete(organizationId);
 };
 
-export default { createOrganization: createOrganization, getOrganization: getOrganization, getAllOrganizations: getAllOrganizations, updateOrganization: updateOrganization, deleteOrganization: deleteOrganization };
+const getOrganizationWithUsers = async (organizationId: string): Promise<IOrganizationModel | null> => {
+    return await Organization.findById(organizationId).populate('users', '-organization').lean();
+};
+
+export default { createOrganization, getOrganization, getAllOrganizations, updateOrganization, deleteOrganization, getOrganizationWithUsers };
