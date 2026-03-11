@@ -25,8 +25,8 @@ const customerSchema = new Schema<ICustomer>({
         points: { type: Number, default: 0, required: true },
     }],
     visitHistory: [{ type: Schema.Types.ObjectId, ref: 'Visit' }],
-    badges: [{ type: Schema.Types.ObjectId, ref: 'BadgeCustomer' }],
     favoriteRestaurants: [{ type: Schema.Types.ObjectId, ref: 'Restaurant' }],
+    badges: [{ type: Schema.Types.ObjectId, ref: 'BadgeCustomer' }],
     reviews: [{ type: Schema.Types.ObjectId, ref: 'Review' }]
 }, { timestamps: true });
 

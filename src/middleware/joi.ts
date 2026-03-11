@@ -1,9 +1,9 @@
 import Joi, { ObjectSchema } from 'joi';
 import { NextFunction, Request, Response } from 'express';
-import { IRestaurant } from '../models/restaurant';
-import { ICustomer } from '../models/customer';
 import { IBadgeCustomer } from '../models/badgeCustomer';
 import { IBadgeRestaurant } from '../models/badgeRestaurant';
+import { ICustomer } from '../models/customer';
+import { IRestaurant } from '../models/restaurant';
 import { IReview } from '../models/review';
 import { IReward } from '../models/reward';
 import { IStatistics } from '../models/statistics';
@@ -25,15 +25,181 @@ export const ValidateJoi = (schema: ObjectSchema) => {
     };
 };
 
+const timetableDaySchema = Joi.array().items(
+    Joi.object({
+        open: Joi.string(),
+        close: Joi.string()
+    })
+);
+
+const timetableSchema = Joi.object({
+    monday: timetableDaySchema,
+    tuesday: timetableDaySchema,
+    wednesday: timetableDaySchema,
+    thursday: timetableDaySchema,
+    friday: timetableDaySchema,
+    saturday: timetableDaySchema,
+    sunday: timetableDaySchema
+});
+
+const categoryEnum = [
+    'Italià', 'Japonès', 'Sushi', 'Mexicà', 'Xinès', 'Indi', 'Tailandès', 'Francès',
+    'Espanyol', 'Grec', 'Turc', 'Coreà', 'Vietnamita', 'Alemany', 'Brasileny', 'Peruà',
+    'Vegà', 'Vegetarià', 'Marisc', 'Carn', 'Pizzeria', 'Cafeteria', 'Ramen', 'Gluten Free',
+    'Gourmet', 'Fast Food', 'Buffet', 'Food Truck', 'Lounge', 'Pub', 'Wine Bar', 'Rooftop',
+    'Bar', 'Taperia', 'Gelateria', 'Estrella Michelin'
+];
+
+const objectId = Joi.string().length(24).hex();
+
 export const Schemas = {
+    badgeCustomer: {
+        create: Joi.object<IBadgeCustomer>({
+            title: Joi.string().required(),
+            description: Joi.string().required()
+        }),
+        update: Joi.object<IBadgeCustomer>({
+            title: Joi.string(),
+            description: Joi.string()
+        })
+    },
+
+    badgeRestaurant: {
+        create: Joi.object<IBadgeRestaurant>({
+            title: Joi.string().required(),
+            description: Joi.string().required()
+        }),
+        update: Joi.object<IBadgeRestaurant>({
+            title: Joi.string(),
+            description: Joi.string()
+        })
+    },
+
+    customer: {
+        create: Joi.object<ICustomer>({
+            name: Joi.string().required(),
+            email: Joi.string().email().required(),
+            passwordHash: Joi.string().required(),
+            profilePictures: Joi.array().items(Joi.string().uri()),
+            pointsWallet: Joi.array().items(
+                Joi.object({
+                    restaurant_id: objectId.required(),
+                    points: Joi.number().min(0).default(0)
+                })
+            ),
+            visitHistory: Joi.array().items(objectId),
+            favoriteRestaurants: Joi.array().items(objectId),
+            badges: Joi.array().items(objectId),
+            reviews: Joi.array().items(objectId)
+        }),
+        update: Joi.object<ICustomer>({
+            name: Joi.string(),
+            email: Joi.string().email(),
+            passwordHash: Joi.string(),
+            profilePictures: Joi.array().items(Joi.string().uri()),
+            pointsWallet: Joi.array().items(
+                Joi.object({
+                    restaurant_id: objectId.required(),
+                    points: Joi.number().min(0)
+                })
+            ),
+            visitHistory: Joi.array().items(objectId),
+            favoriteRestaurants: Joi.array().items(objectId),
+            badges: Joi.array().items(objectId),
+            reviews: Joi.array().items(objectId)
+        })
+    },
+
+    review: {
+        create: Joi.object<IReview>({
+            customer_id: objectId.required(),
+            restaurant_id: objectId.required(),
+            date: Joi.date().required(),
+            ratings: Joi.object({
+                foodQuality: Joi.number().min(0).max(10),
+                staffService: Joi.number().min(0).max(10),
+                cleanliness: Joi.number().min(0).max(10),
+                environment: Joi.number().min(0).max(10)
+            }),
+            comment: Joi.string(),
+            photos: Joi.array().items(Joi.string().uri()),
+            likes: Joi.number().min(0).default(0),
+            extraPoints: Joi.number().min(0).default(0)
+        }),
+        update: Joi.object<IReview>({
+            date: Joi.date(),
+            ratings: Joi.object({
+                foodQuality: Joi.number().min(0).max(10),
+                staffService: Joi.number().min(0).max(10),
+                cleanliness: Joi.number().min(0).max(10),
+                environment: Joi.number().min(0).max(10)
+            }),
+            comment: Joi.string(),
+            photos: Joi.array().items(Joi.string().uri()),
+            likes: Joi.number().min(0),
+            extraPoints: Joi.number().min(0)
+        })
+    },
+
+    reward: {
+        create: Joi.object<IReward>({
+            restaurant_id: objectId.required(),
+            name: Joi.string().required(),
+            description: Joi.string().required(),
+            pointsRequired: Joi.number().min(0),
+            active: Joi.boolean().default(true),
+            expiry: Joi.date(),
+            timesRedeemed: Joi.number().min(0).default(0)
+        }),
+        update: Joi.object<IReward>({
+            name: Joi.string(),
+            description: Joi.string(),
+            pointsRequired: Joi.number().min(0),
+            active: Joi.boolean(),
+            expiry: Joi.date(),
+            timesRedeemed: Joi.number().min(0)
+        })
+    },
+
+    statistics: {
+        create: Joi.object<IStatistics>({
+            restaurant_id: objectId.required(),
+            totalPointsGiven: Joi.number().min(0).default(0),
+            loyalCustomers: Joi.number().min(0).default(0),
+            mostRequestedRewards: Joi.array().items(objectId),
+            averagePointsPerVisit: Joi.number().min(0).default(0)
+        }),
+        update: Joi.object<IStatistics>({
+            totalPointsGiven: Joi.number().min(0),
+            loyalCustomers: Joi.number().min(0),
+            mostRequestedRewards: Joi.array().items(objectId),
+            averagePointsPerVisit: Joi.number().min(0)
+        })
+    },
+
+    visit: {
+        create: Joi.object<IVisit>({
+            customer_id: objectId.required(),
+            restaurant_id: objectId.required(),
+            date: Joi.date().default(() => new Date()),
+            pointsEarned: Joi.number().min(0).default(0),
+            billAmount: Joi.number().min(0).default(0)
+        }),
+        update: Joi.object<IVisit>({
+            date: Joi.date(),
+            pointsEarned: Joi.number().min(0),
+            billAmount: Joi.number().min(0)
+        })
+    },
+
     restaurant: {
         create: Joi.object<IRestaurant>({
             profile: Joi.object({
                 name: Joi.string().required(),
                 description: Joi.string(),
                 rating: Joi.number().min(0).max(10),
-                category: Joi.array().items(Joi.string()),
-                timetable: Joi.array().items(Joi.string()),
+                category: Joi.array().items(Joi.string().valid(...categoryEnum)),
+                timetable: timetableSchema,
                 image: Joi.array().items(Joi.string().uri()),
 
                 contact: Joi.object({
@@ -54,24 +220,17 @@ export const Schemas = {
                 }).required()
             }).required(),
 
-            rewards: Joi.array().items(
-                Joi.string().length(24).hex()
-            ),
-
-            statistics: Joi.string().length(24).hex(),
-
-            badges: Joi.array().items(
-                Joi.string().length(24).hex()
-            )
+            rewards: Joi.array().items(objectId),
+            statistics: objectId,
+            badges: Joi.array().items(objectId)
         }),
         update: Joi.object<IRestaurant>({
             profile: Joi.object({
                 name: Joi.string(),
                 description: Joi.string(),
-                rating: Joi.number().min(0).max(5),
-
-                category: Joi.array().items(Joi.string()),
-                timetable: Joi.array().items(Joi.string()),
+                rating: Joi.number().min(0).max(10),
+                category: Joi.array().items(Joi.string().valid(...categoryEnum)),
+                timetable: timetableSchema,
                 image: Joi.array().items(Joi.string().uri()),
 
                 contact: Joi.object({
@@ -89,15 +248,9 @@ export const Schemas = {
                 })
             }),
 
-            rewards: Joi.array().items(
-                Joi.string().length(24).hex()
-            ),
-
-            statistics: Joi.string().length(24).hex(),
-
-            badges: Joi.array().items(
-                Joi.string().length(24).hex()
-            )
+            rewards: Joi.array().items(objectId),
+            statistics: objectId,
+            badges: Joi.array().items(objectId)
         })
     }
 };
