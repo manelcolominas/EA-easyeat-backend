@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import User, { IUserModel, IUser } from '../models/client';
+import User, { IUserModel, IUser } from '../models/customer';
 import Organization from '../models/restaurant';
 
 const createUser = async (data: Partial<IUser>): Promise<IUserModel> => {

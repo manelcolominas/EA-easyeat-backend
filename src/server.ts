@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import { config } from './config/config';
 import Logging from './library/logging';
-import organizationRoutes from './routes/organization';
+import organizationRoutes from './routes/restaurant';
 import userRoutes from './routes/user';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './swagger';
