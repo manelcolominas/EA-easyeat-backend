@@ -27,7 +27,6 @@ export const ValidateJoi = (schema: ObjectSchema) => {
         }
     };
 };
-<<<<<<< Updated upstream
 
 const timetableDaySchema = Joi.array().items(
     Joi.object({
@@ -56,12 +55,6 @@ const categoryEnum = [
 
 const objectId = Joi.string().length(24).hex();
 
-=======
-const timeSlot = Joi.object({
-  open: Joi.string().required(),
-  close: Joi.string().required()
-});
->>>>>>> Stashed changes
 export const Schemas = {
     badgeCustomer: {
         create: Joi.object<IBadgeCustomer>({
@@ -253,21 +246,8 @@ export const Schemas = {
                 name: Joi.string().required(),
                 description: Joi.string(),
                 rating: Joi.number().min(0).max(10),
-<<<<<<< Updated upstream
                 category: Joi.array().items(Joi.string().valid(...categoryEnum)),
                 timetable: timetableSchema,
-=======
-                category: Joi.array().items(Joi.string()),
-                timetable: Joi.object({
-                monday: Joi.array().items(timeSlot),
-                tuesday: Joi.array().items(timeSlot),
-                wednesday: Joi.array().items(timeSlot),
-                thursday: Joi.array().items(timeSlot),
-                friday: Joi.array().items(timeSlot),
-                saturday: Joi.array().items(timeSlot),
-                sunday: Joi.array().items(timeSlot)
-                }),
->>>>>>> Stashed changes
                 image: Joi.array().items(Joi.string().uri()),
 
                 contact: Joi.object({
@@ -298,24 +278,9 @@ export const Schemas = {
             profile: Joi.object({
                 name: Joi.string(),
                 description: Joi.string(),
-<<<<<<< Updated upstream
                 rating: Joi.number().min(0).max(10),
                 category: Joi.array().items(Joi.string().valid(...categoryEnum)),
                 timetable: timetableSchema,
-=======
-                rating: Joi.number().min(0).max(5),
-
-                category: Joi.array().items(Joi.string()),
-                timetable: Joi.object({
-                    monday: Joi.array().items(timeSlot),
-                    tuesday: Joi.array().items(timeSlot),
-                    wednesday: Joi.array().items(timeSlot),
-                    thursday: Joi.array().items(timeSlot),
-                    friday: Joi.array().items(timeSlot),
-                    saturday: Joi.array().items(timeSlot),
-                    sunday: Joi.array().items(timeSlot)
-                    }),
->>>>>>> Stashed changes
                 image: Joi.array().items(Joi.string().uri()),
 
                 contact: Joi.object({
