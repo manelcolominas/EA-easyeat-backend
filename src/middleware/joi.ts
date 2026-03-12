@@ -1,7 +1,6 @@
 import Joi, { ObjectSchema } from 'joi';
 import { NextFunction, Request, Response } from 'express';
-import { IBadgeCustomer } from '../models/badgeCustomer';
-import { IBadgeRestaurant } from '../models/badgeRestaurant';
+import { IBadge } from '../models/badge';
 import { ICustomer } from '../models/customer';
 import { IEmployee } from '../models/employee';
 import { IPointsWallet } from '../models/pointsWallet';
@@ -55,34 +54,31 @@ const categoryEnum = [
 
 const objectId = Joi.string().length(24).hex();
 
-export const Schemas = {
-    badgeCustomer: {
-        create: Joi.object<IBadgeCustomer>({
-            title: Joi.string().required(),
-            description: Joi.string().required()
-        }),
-        update: Joi.object<IBadgeCustomer>({
-            title: Joi.string(),
-            description: Joi.string()
-        })
-    },
+// Password rules centralitzades — fàcil de modificar en un sol lloc
+const passwordSchema = Joi.string().min(8).max(128).required();
+const passwordUpdateSchema = Joi.string().min(8).max(128); // opcional en update
 
-    badgeRestaurant: {
-        create: Joi.object<IBadgeRestaurant>({
+export const Schemas = {
+
+    badge: {
+        create: Joi.object<IBadge>({
             title: Joi.string().required(),
-            description: Joi.string().required()
+            description: Joi.string().required(),
+            type: Joi.string().required()
         }),
-        update: Joi.object<IBadgeRestaurant>({
+        update: Joi.object<IBadge>({
             title: Joi.string(),
-            description: Joi.string()
+            description: Joi.string(),
+            type: Joi.string()
         })
     },
 
     customer: {
+        // El client envia 'password' (text pla). El controller el hasheja abans de guardar.
         create: Joi.object<ICustomer>({
             name: Joi.string().required(),
             email: Joi.string().email().required(),
-            passwordHash: Joi.string().required(),
+            password: passwordSchema,
             profilePictures: Joi.array().items(Joi.string().uri()),
             pointsWallet: Joi.array().items(objectId),
             visitHistory: Joi.array().items(objectId),
@@ -93,7 +89,7 @@ export const Schemas = {
         update: Joi.object<ICustomer>({
             name: Joi.string(),
             email: Joi.string().email(),
-            passwordHash: Joi.string(),
+            password: passwordUpdateSchema,
             profilePictures: Joi.array().items(Joi.string().uri()),
             pointsWallet: Joi.array().items(objectId),
             visitHistory: Joi.array().items(objectId),
@@ -104,13 +100,14 @@ export const Schemas = {
     },
 
     employee: {
+        // El client envia 'password' (text pla). El controller el hasheja abans de guardar.
         create: Joi.object<IEmployee>({
             restaurant_id: objectId.required(),
             profile: Joi.object({
                 name: Joi.string().required(),
                 email: Joi.string().email(),
                 phone: Joi.string().trim(),
-                passwordHash: Joi.string().required(),
+                password: passwordSchema,
                 role: Joi.string().valid('owner', 'staff').default('staff').required()
             }).required(),
             active: Joi.boolean().default(true)
@@ -120,7 +117,7 @@ export const Schemas = {
                 name: Joi.string(),
                 email: Joi.string().email(),
                 phone: Joi.string().trim(),
-                passwordHash: Joi.string(),
+                password: passwordUpdateSchema,
                 role: Joi.string().valid('owner', 'staff')
             }),
             active: Joi.boolean()
@@ -143,14 +140,14 @@ export const Schemas = {
             customer_id: objectId.required(),
             restaurant_id: objectId.required(),
             reward_id: objectId.required(),
-            employeeId: objectId,
+            employee_id: objectId,
             pointsUsed: Joi.number().min(0).required(),
             status: Joi.string().valid('pending', 'approved', 'redeemed', 'cancelled', 'expired').default('pending'),
             redeemedAt: Joi.date().default(() => new Date()),
             notes: Joi.string().trim()
         }),
         update: Joi.object<IRewardRedemption>({
-            employeeId: objectId,
+            employee_id: objectId,
             pointsUsed: Joi.number().min(0),
             status: Joi.string().valid('pending', 'approved', 'redeemed', 'cancelled', 'expired'),
             redeemedAt: Joi.date(),
@@ -291,6 +288,7 @@ export const Schemas = {
                 location: Joi.object({
                     city: Joi.string(),
                     address: Joi.string(),
+                    googlePlaceId: Joi.string(),
                     coordinates: Joi.object({
                         type: Joi.string().valid('Point'),
                         coordinates: Joi.array().items(Joi.number()).length(2)

@@ -2,7 +2,7 @@ import { Schema, model, Types } from 'mongoose';
 
 // 1️⃣ Interface
 export interface IReward {
-    _id?: string;
+    _id?: Types.ObjectId;
     restaurant_id: Types.ObjectId;   // reference to Restaurant
     name: string;
     description: string;

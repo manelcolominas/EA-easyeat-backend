@@ -2,7 +2,7 @@ import { Schema, model, Types } from 'mongoose';
 
 // 1️⃣ Interface
 export interface IVisit {
-    _id?: string;
+    _id?: Types.ObjectId;
     customer_id: Types.ObjectId;            // reference to Customer
     restaurant_id: Types.ObjectId;          // reference to Restaurant
     date: Date;

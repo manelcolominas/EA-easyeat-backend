@@ -1,17 +1,19 @@
 import { Schema, model, Types } from 'mongoose';
 
 // 1️⃣ Interface
-export interface IBadgeCustomer {
+export interface IBadge {
     _id?: Types.ObjectId;
     title: string;
     description: string;
+    type: string;
 }
 
-// 2️⃣ Schema
-const badgeCustomerSchema = new Schema<IBadgeCustomer>({
+// Schema
+const badgeRestaurantSchema = new Schema<IBadge>({
     title: { type: String, required: true },
     description: { type: String, required: true },
+    type: { type: String, required: true }
 }, { timestamps: true });
 
-// 3️⃣ Model
-export const BadgeCustomerModel = model<IBadgeCustomer>('BadgeCustomer', badgeCustomerSchema);
+// Model
+export const BadgeModel = model<IBadge>('Badge', badgeRestaurantSchema);

@@ -28,7 +28,7 @@ export interface IRestaurant {
             googlePlaceId?: string;
             coordinates: {
                 type: { type: String, enum: ['Point'], default: 'Point' },
-                coordinates: [Number] // [longitude, latitude]
+                coordinates: [number, number]; // [longitude, latitude]
             };
         };
     };
@@ -74,14 +74,14 @@ const restaurantSchema = new Schema<IRestaurant>(
                 googlePlaceId: { type: String },
                 coordinates: {
                     type: { type: String, enum: ['Point'], default: 'Point', required: true },
-                    coordinates: { type: [Number], required: true } // [longitude, latitude]
+                    coordinates: { type: [Number], required: true }
                 }
             },
         },
         employees: [{ type: Schema.Types.ObjectId, ref: "Employee" }],
         rewards: [{ type: Schema.Types.ObjectId, ref: "Reward" }],
         statistics: { type: Schema.Types.ObjectId, ref: "Statistics" },
-        badges: [{ type: Schema.Types.ObjectId, ref: "BadgeRestaurant" }]
+        badges: [{ type: Schema.Types.ObjectId, ref: "Badge" }]
     },
     { timestamps: true }
 );

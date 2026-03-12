@@ -2,7 +2,7 @@ import { Schema, model, Types } from 'mongoose';
 
 // Interface
 export interface IStatistics {
-    _id?: string;
+    _id?: Types.ObjectId;
     restaurant_id: Types.ObjectId;
     totalPointsGiven?: number;
     loyalCustomers?: number;
