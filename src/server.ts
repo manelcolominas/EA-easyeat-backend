@@ -4,7 +4,11 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import { config } from './config/config';
 import Logging from './library/logging';
+<<<<<<< Updated upstream
 import organizationRoutes from './routes/restaurant';
+=======
+import restaurantRoutes from './routes/restaurant';
+>>>>>>> Stashed changes
 import userRoutes from './routes/user';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './swagger';
@@ -47,7 +51,7 @@ const StartServer = () => {
     router.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
     /** Routes */
-    router.use('/organizations', organizationRoutes);
+    router.use('/restaurants', restaurantRoutes);
     router.use('/users', userRoutes);
 
     /** Healthcheck */
