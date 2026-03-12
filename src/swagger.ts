@@ -8,7 +8,7 @@ const options: Options = {
     info: {
       title: 'EA Sem5 API',
       version: '1.0.0',
-      description: 'REST API for Organizations and Users',
+      description: 'REST API for Restaurants and Users',
     },
     servers: [
       {
