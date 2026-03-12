@@ -7,7 +7,7 @@ export interface ICustomer {
     email: string;
     passwordHash: string;
     profilePictures?: string[];
-    pointsWallet?: { restaurant_id: Types.ObjectId; points: number }[];
+    pointsWallet?: Types.ObjectId[];
     visitHistory?: Types.ObjectId[];
     favoriteRestaurants?: Types.ObjectId[];
     badges?: Types.ObjectId[];
@@ -20,10 +20,7 @@ const customerSchema = new Schema<ICustomer>({
     email: { type: String, required: true, unique: true, match: /.+\@.+\..+/ },
     passwordHash: { type: String },
     profilePictures: [{ type: String }],
-    pointsWallet: [{
-        restaurant_id: { type: Schema.Types.ObjectId, ref: 'Restaurant', required: true },
-        points: { type: Number, default: 0, required: true },
-    }],
+    pointsWallet: [{ type: Schema.Types.ObjectId, ref: 'PointsWallet', required: true }],
     visitHistory: [{ type: Schema.Types.ObjectId, ref: 'Visit' }],
     favoriteRestaurants: [{ type: Schema.Types.ObjectId, ref: 'Restaurant' }],
     badges: [{ type: Schema.Types.ObjectId, ref: 'BadgeCustomer' }],

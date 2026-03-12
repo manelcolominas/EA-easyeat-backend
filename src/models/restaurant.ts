@@ -25,12 +25,14 @@ export interface IRestaurant {
         location: {
             city: string;
             address: string;
+            googlePlaceId?: string;
             coordinates: {
                 type: { type: String, enum: ['Point'], default: 'Point' },
                 coordinates: [Number] // [longitude, latitude]
             };
         };
     };
+    employees?: Types.ObjectId[];
     rewards?: Types.ObjectId[];
     statistics?: Types.ObjectId;
     badges?: Types.ObjectId[];
@@ -69,12 +71,14 @@ const restaurantSchema = new Schema<IRestaurant>(
             location: {
                 city: { type: String, required: true },
                 address: { type: String, required: true },
+                googlePlaceId: { type: String },
                 coordinates: {
                     type: { type: String, enum: ['Point'], default: 'Point', required: true },
                     coordinates: { type: [Number], required: true } // [longitude, latitude]
                 }
             },
         },
+        employees: [{ type: Schema.Types.ObjectId, ref: "Employee" }],
         rewards: [{ type: Schema.Types.ObjectId, ref: "Reward" }],
         statistics: { type: Schema.Types.ObjectId, ref: "Statistics" },
         badges: [{ type: Schema.Types.ObjectId, ref: "BadgeRestaurant" }]

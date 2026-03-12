@@ -14,4 +14,4 @@ const badgeCustomerSchema = new Schema<IBadgeCustomer>({
 }, { timestamps: true });
 
 // 3️⃣ Model
-export const BadgeModel = model<IBadgeCustomer>('BadgeCustomer', badgeCustomerSchema);
+export const BadgeCustomerModel = model<IBadgeCustomer>('BadgeCustomer', badgeCustomerSchema);

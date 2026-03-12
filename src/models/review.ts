@@ -7,10 +7,10 @@ export interface IReview {
     restaurant_id: Types.ObjectId;    // reference to Restaurant
     date: Date;
     ratings?: {
-        foodQuality?: number;                   // 0-5 stars
-        staffService?: number;                  // 0-5 stars
-        cleanliness?: number;            // 0-5 stars
-        environment?: number;               // 0-5 stars
+        foodQuality?: number;
+        staffService?: number;
+        cleanliness?: number;
+        environment?: number;
     };
     comment?: string;
     photos?: string[];

@@ -14,7 +14,7 @@ export interface IVisit {
 const visitSchema = new Schema<IVisit>({
     customer_id: { type: Schema.Types.ObjectId, ref: 'Customer', required: true },
     restaurant_id: { type: Schema.Types.ObjectId, ref: 'Restaurant', required: true },
-    date: { type: Date, default: new Date(), required: true },
+    date: { type: Date, default: () => new Date(), required: true },
     pointsEarned: { type: Number, default: 0 },
     billAmount: { type: Number, default: 0 }
 }, { timestamps: true });

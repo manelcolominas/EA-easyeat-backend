@@ -3,9 +3,12 @@ import { NextFunction, Request, Response } from 'express';
 import { IBadgeCustomer } from '../models/badgeCustomer';
 import { IBadgeRestaurant } from '../models/badgeRestaurant';
 import { ICustomer } from '../models/customer';
+import { IEmployee } from '../models/employee';
+import { IPointsWallet } from '../models/pointsWallet';
 import { IRestaurant } from '../models/restaurant';
 import { IReview } from '../models/review';
 import { IReward } from '../models/reward';
+import { IRewardRedemption } from '../models/rewardRedemption';
 import { IStatistics } from '../models/statistics';
 import { IVisit } from '../models/visit';
 
@@ -81,12 +84,7 @@ export const Schemas = {
             email: Joi.string().email().required(),
             passwordHash: Joi.string().required(),
             profilePictures: Joi.array().items(Joi.string().uri()),
-            pointsWallet: Joi.array().items(
-                Joi.object({
-                    restaurant_id: objectId.required(),
-                    points: Joi.number().min(0).default(0)
-                })
-            ),
+            pointsWallet: Joi.array().items(objectId),
             visitHistory: Joi.array().items(objectId),
             favoriteRestaurants: Joi.array().items(objectId),
             badges: Joi.array().items(objectId),
@@ -97,16 +95,66 @@ export const Schemas = {
             email: Joi.string().email(),
             passwordHash: Joi.string(),
             profilePictures: Joi.array().items(Joi.string().uri()),
-            pointsWallet: Joi.array().items(
-                Joi.object({
-                    restaurant_id: objectId.required(),
-                    points: Joi.number().min(0)
-                })
-            ),
+            pointsWallet: Joi.array().items(objectId),
             visitHistory: Joi.array().items(objectId),
             favoriteRestaurants: Joi.array().items(objectId),
             badges: Joi.array().items(objectId),
             reviews: Joi.array().items(objectId)
+        })
+    },
+
+    employee: {
+        create: Joi.object<IEmployee>({
+            restaurant_id: objectId.required(),
+            profile: Joi.object({
+                name: Joi.string().required(),
+                email: Joi.string().email(),
+                phone: Joi.string().trim(),
+                passwordHash: Joi.string().required(),
+                role: Joi.string().valid('owner', 'staff').default('staff').required()
+            }).required(),
+            active: Joi.boolean().default(true)
+        }),
+        update: Joi.object<IEmployee>({
+            profile: Joi.object({
+                name: Joi.string(),
+                email: Joi.string().email(),
+                phone: Joi.string().trim(),
+                passwordHash: Joi.string(),
+                role: Joi.string().valid('owner', 'staff')
+            }),
+            active: Joi.boolean()
+        })
+    },
+
+    pointsWallet: {
+        create: Joi.object<IPointsWallet>({
+            customer_id: objectId.required(),
+            restaurant_id: objectId.required(),
+            points: Joi.number().min(0).default(0)
+        }),
+        update: Joi.object<IPointsWallet>({
+            points: Joi.number().min(0).required()
+        })
+    },
+
+    rewardRedemption: {
+        create: Joi.object<IRewardRedemption>({
+            customer_id: objectId.required(),
+            restaurant_id: objectId.required(),
+            reward_id: objectId.required(),
+            employeeId: objectId,
+            pointsUsed: Joi.number().min(0).required(),
+            status: Joi.string().valid('pending', 'approved', 'redeemed', 'cancelled', 'expired').default('pending'),
+            redeemedAt: Joi.date().default(() => new Date()),
+            notes: Joi.string().trim()
+        }),
+        update: Joi.object<IRewardRedemption>({
+            employeeId: objectId,
+            pointsUsed: Joi.number().min(0),
+            status: Joi.string().valid('pending', 'approved', 'redeemed', 'cancelled', 'expired'),
+            redeemedAt: Joi.date(),
+            notes: Joi.string().trim()
         })
     },
 
@@ -210,6 +258,7 @@ export const Schemas = {
                 location: Joi.object({
                     city: Joi.string().required(),
                     address: Joi.string().required(),
+                    googlePlaceId: Joi.string(),
                     coordinates: Joi.object({
                         type: Joi.string().valid('Point').default('Point'),
                         coordinates: Joi.array()
@@ -220,6 +269,7 @@ export const Schemas = {
                 }).required()
             }).required(),
 
+            employees: Joi.array().items(objectId),
             rewards: Joi.array().items(objectId),
             statistics: objectId,
             badges: Joi.array().items(objectId)
@@ -248,6 +298,7 @@ export const Schemas = {
                 })
             }),
 
+            employees: Joi.array().items(objectId),
             rewards: Joi.array().items(objectId),
             statistics: objectId,
             badges: Joi.array().items(objectId)

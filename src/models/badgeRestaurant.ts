@@ -14,4 +14,4 @@ const badgeRestaurantSchema = new Schema<IBadgeRestaurant>({
 }, { timestamps: true });
 
 // 3️⃣ Model
-export const BadgeModel = model<IBadgeRestaurant>('BadgeRestaurant', badgeRestaurantSchema);
+export const BadgeRestaurantModel = model<IBadgeRestaurant>('BadgeRestaurant', badgeRestaurantSchema);
