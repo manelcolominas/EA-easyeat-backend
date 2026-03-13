@@ -1,0 +1,40 @@
+[
+  {
+    "_id": "73d4e5f6a7b8c9d0e1f2a3b4",
+    "customer_id": "65b2c3d4e5f6a7b8c9d0e1f2",
+    "restaurant_id": "68e5f6a7b8c9d0e1f2a3b4c5",
+    "reward_id": "71b2c3d4e5f6a7b8c9d0e1f2",
+    "employee_id": "70a1b2c3d4e5f6a7b8c9d0e2",
+    "pointsUsed": 200,
+    "status": "redeemed",
+    "redeemedAt": "2024-06-14T21:45:00.000Z",
+    "notes": "Customer chose the crème brûlée.",
+    "createdAt": "2024-06-14T21:45:00.000Z",
+    "updatedAt": "2024-06-14T21:50:00.000Z"
+  },
+  {
+    "_id": "73d4e5f6a7b8c9d0e1f2a3b5",
+    "customer_id": "65b2c3d4e5f6a7b8c9d0e1f3",
+    "restaurant_id": "68e5f6a7b8c9d0e1f2a3b4c6",
+    "reward_id": "71b2c3d4e5f6a7b8c9d0e1f4",
+    "employee_id": "70a1b2c3d4e5f6a7b8c9d0e3",
+    "pointsUsed": 150,
+    "status": "pending",
+    "redeemedAt": "2024-06-15T12:30:00.000Z",
+    "createdAt": "2024-06-15T12:30:00.000Z",
+    "updatedAt": "2024-06-15T12:30:00.000Z"
+  },
+  {
+    "_id": "73d4e5f6a7b8c9d0e1f2a3b6",
+    "customer_id": "65b2c3d4e5f6a7b8c9d0e1f2",
+    "restaurant_id": "68e5f6a7b8c9d0e1f2a3b4c5",
+    "reward_id": "71b2c3d4e5f6a7b8c9d0e1f5",
+    "employee_id": "70a1b2c3d4e5f6a7b8c9d0e1",
+    "pointsUsed": 1000,
+    "status": "expired",
+    "redeemedAt": "2024-04-10T19:00:00.000Z",
+    "notes": "Reward expired before approval.",
+    "createdAt": "2024-04-10T19:00:00.000Z",
+    "updatedAt": "2024-04-15T00:00:00.000Z"
+  }
+]

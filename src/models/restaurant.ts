@@ -51,7 +51,7 @@ const restaurantSchema = new Schema<IRestaurant>(
                     'Italià', 'Japonès', 'Sushi', 'Mexicà', 'Xinès', 'Indi', 'Tailandès', 'Francès',
                     'Espanyol', 'Grec', 'Turc', 'Coreà', 'Vietnamita','Alemany', 'Brasileny', 'Peruà', 'Vegà', 'Vegetarià', 'Marisc', 'Carn',
                     'Pizzeria', 'Cafeteria', 'Ramen', 'Gluten Free','Gourmet', 'Fast Food', 'Buffet', 'Food Truck',
-                    'Lounge', 'Pub', 'Wine Bar', 'Rooftop', 'Bar', 'Taperia', 'Gelateria', 'Estrella Michelin'
+                    'Lounge', 'Pub', 'Wine Bar', 'Rooftop', 'Bar', 'Taperia', 'Gelateria', 'Estrella Michelin','Street Food'
                 ]
             }],
             timetable: {

@@ -1,0 +1,42 @@
+[
+  {
+    "_id": "67d4e5f6a7b8c9d0e1f2a3b4",
+    "customer_id": "65b2c3d4e5f6a7b8c9d0e1f2",
+    "restaurant_id": "68e5f6a7b8c9d0e1f2a3b4c5",
+    "date": "2024-06-14T21:00:00.000Z",
+    "pointsEarned": 95,
+    "billAmount": 47.50,
+    "createdAt": "2024-06-14T21:00:00.000Z",
+    "updatedAt": "2024-06-14T21:00:00.000Z"
+  },
+  {
+    "_id": "67d4e5f6a7b8c9d0e1f2a3b5",
+    "customer_id": "65b2c3d4e5f6a7b8c9d0e1f2",
+    "restaurant_id": "68e5f6a7b8c9d0e1f2a3b4c5",
+    "date": "2024-05-20T20:00:00.000Z",
+    "pointsEarned": 120,
+    "billAmount": 62.00,
+    "createdAt": "2024-05-20T20:00:00.000Z",
+    "updatedAt": "2024-05-20T20:00:00.000Z"
+  },
+  {
+    "_id": "67d4e5f6a7b8c9d0e1f2a3b6",
+    "customer_id": "65b2c3d4e5f6a7b8c9d0e1f2",
+    "restaurant_id": "68e5f6a7b8c9d0e1f2a3b4c6",
+    "date": "2024-04-10T13:00:00.000Z",
+    "pointsEarned": 50,
+    "billAmount": 24.00,
+    "createdAt": "2024-04-10T13:00:00.000Z",
+    "updatedAt": "2024-04-10T13:00:00.000Z"
+  },
+  {
+    "_id": "67d4e5f6a7b8c9d0e1f2a3b7",
+    "customer_id": "65b2c3d4e5f6a7b8c9d0e1f3",
+    "restaurant_id": "68e5f6a7b8c9d0e1f2a3b4c5",
+    "date": "2024-05-10T14:00:00.000Z",
+    "pointsEarned": 0,
+    "billAmount": 18.50,
+    "createdAt": "2024-05-10T14:00:00.000Z",
+    "updatedAt": "2024-05-10T14:00:00.000Z"
+  }
+]
