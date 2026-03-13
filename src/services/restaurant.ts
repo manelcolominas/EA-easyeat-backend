@@ -1,10 +1,7 @@
-import mongoose from 'mongoose';
 import { RestaurantModel, IRestaurant } from '../models/restaurant';
 
 const createRestaurant = async (data: Partial<IRestaurant>): Promise<IRestaurant> => {
-    const restaurant = new RestaurantModel({
-        ...data
-    });
+    const restaurant = new RestaurantModel({ ...data });
     return await restaurant.save();
 };
 
@@ -33,4 +30,49 @@ const getRestaurantWithCustumers = async (restaurantId: string): Promise<IRestau
     return await RestaurantModel.findById(restaurantId).populate('customers', '-restaurant').lean();
 };
 
-export default { createRestaurant, getRestaurant, getAllRestaurants, updateRestaurant, deleteRestaurant, getRestaurantWithCustumers };
+const getRestaurantFull = async (restaurantId: string): Promise<IRestaurant | null> => {
+    return await RestaurantModel.findById(restaurantId)
+        .populate('employees')
+        .populate('rewards')
+        .populate('badges')
+        .populate('statistics')
+        .lean();
+};
+
+const getNearby = async (lng: number, lat: number, maxDistance: number): Promise<IRestaurant[]> => {
+    return await RestaurantModel.find({
+        'profile.location.coordinates': {
+            $near: {
+                $geometry: { type: 'Point', coordinates: [lng, lat] },
+                $maxDistance: maxDistance
+            }
+        }
+    }).lean();
+};
+
+const getBadges = async (restaurantId: string): Promise<IRestaurant | null> => {
+    return await RestaurantModel.findById(restaurantId)
+        .select('badges')
+        .populate('badges')
+        .lean();
+};
+
+const getStatistics = async (restaurantId: string): Promise<IRestaurant | null> => {
+    return await RestaurantModel.findById(restaurantId)
+        .select('statistics')
+        .populate('statistics')
+        .lean();
+};
+
+export default {
+    createRestaurant,
+    getRestaurant,
+    getAllRestaurants,
+    updateRestaurant,
+    deleteRestaurant,
+    getRestaurantWithCustumers,
+    getRestaurantFull,
+    getNearby,
+    getBadges,
+    getStatistics
+};
