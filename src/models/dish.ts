@@ -1,4 +1,5 @@
 import { Schema, model, Types } from 'mongoose';
+import { ServicePeriod } from '../utils/servicePeriod';
 
 // Interface
 export interface IDish {
@@ -11,7 +12,7 @@ export interface IDish {
     images?: string[];
     active: boolean;
 
-    availableAt?: ('breakfast' | 'lunch' | 'dinner' | 'all-day')[];
+    availableAt?: ServicePeriod[];
 
     ingredients?: string[];
     allergens?: ('gluten' | 'shellfish' | 'nuts' | 'dairy' | 'eggs' | 'soy' | 'fish' | 'sesame' | 'mustard' | 'celery' | 'lupins' | 'molluscs' | 'sulphites')[];
@@ -38,10 +39,14 @@ const dishSchema = new Schema<IDish>({
     images: [{ type: String }],
     active: { type: Boolean, default: true, required: true },
 
-    availableAt: [{
-        type: String,
-        enum: ['breakfast', 'brunch', 'lunch', 'happy-hour', 'dinner', 'all-day']
-    }],
+    availableAt: {
+        type: [{ type: String, enum: ['breakfast', 'brunch', 'lunch', 'happy-hour', 'dinner', 'all-day'] }],
+        required: true,
+        validate: {
+            validator: (v: string[]) => v.length > 0,
+            message: 'A dish must be available in at least one service period'
+        }
+    },
 
     ingredients: [{ type: String }],
     allergens: [{
@@ -67,16 +72,6 @@ const dishSchema = new Schema<IDish>({
     }],
     portionSize: { type: String, enum: ['small', 'medium', 'large', 'sharing'] },
 }, { timestamps: true });
-
-
-/*
-
-    'Italià', 'Japonès', 'Sushi', 'Mexicà', 'Xinès', 'Indi', 'Tailandès', 'Francès',
-    'Mediterrani', 'Espanyol', 'Grec', 'Turc', 'Coreà', 'Vietnamita','Alemany', 'Brasileny',
-    'Peruà', 'Vegà', 'Vegetarià', 'Marisc', 'Carn', 'Pizzeria', 'Gluten Free', 'Gourmet',
-    'Fast Food', 'Street Food', 'Wine', 'Tapa', 'Gelateria', 'Sandwich'
-
-*/
 
 // Indexes
 dishSchema.index({ restaurant_id: 1 });

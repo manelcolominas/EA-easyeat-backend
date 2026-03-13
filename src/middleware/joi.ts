@@ -267,6 +267,7 @@ export const Schemas = {
             }).required(),
 
             employees: Joi.array().items(objectId),
+            dishes: Joi.array().items(objectId),
             rewards: Joi.array().items(objectId),
             statistics: objectId,
             badges: Joi.array().items(objectId)
@@ -297,6 +298,7 @@ export const Schemas = {
             }),
 
             employees: Joi.array().items(objectId),
+            dishes: Joi.array().items(objectId),
             rewards: Joi.array().items(objectId),
             statistics: objectId,
             badges: Joi.array().items(objectId)

@@ -33,6 +33,7 @@ export interface IRestaurant {
         };
     };
     employees?: Types.ObjectId[];
+    dishes?: Types.ObjectId[];
     rewards?: Types.ObjectId[];
     statistics?: Types.ObjectId;
     badges?: Types.ObjectId[];
@@ -79,6 +80,7 @@ const restaurantSchema = new Schema<IRestaurant>(
             },
         },
         employees: [{ type: Schema.Types.ObjectId, ref: "Employee" }],
+        dishes: [{ type: Schema.Types.ObjectId, ref: "Dish" }],
         rewards: [{ type: Schema.Types.ObjectId, ref: "Reward" }],
         statistics: { type: Schema.Types.ObjectId, ref: "Statistics" },
         badges: [{ type: Schema.Types.ObjectId, ref: "Badge" }]
