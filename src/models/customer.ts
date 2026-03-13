@@ -5,7 +5,7 @@ export interface ICustomer {
     _id?: Types.ObjectId;
     name: string;
     email: string;
-    passwordHash: string;
+    password: string;
     profilePictures?: string[];
     pointsWallet?: Types.ObjectId[];
     visitHistory?: Types.ObjectId[];
@@ -18,7 +18,7 @@ export interface ICustomer {
 const customerSchema = new Schema<ICustomer>({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true, match: /.+\@.+\..+/ },
-    passwordHash: { type: String },
+    password: { type: String },
     profilePictures: [{ type: String }],
     pointsWallet: [{ type: Schema.Types.ObjectId, ref: 'PointsWallet' }],
     visitHistory: [{ type: Schema.Types.ObjectId, ref: 'Visit' }],
