@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-import mongoose from 'mongoose';
 import ReviewService from '../services/review';
 
 const createReview = async (req: Request, res: Response, next: NextFunction) => {
