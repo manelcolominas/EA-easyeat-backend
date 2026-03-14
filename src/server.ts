@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import { config } from './config/config';
 import Logging from './library/logging';
+import { insertData } from './utils/dataSeeder';
 
 import restaurantRoutes from './routes/restaurant';
 import reviewRoutes from './routes/review';
@@ -21,6 +22,7 @@ mongoose
     .connect(config.mongo.url, { retryWrites: true, w: 'majority' })
     .then(() => {
         Logging.info('Mongo connected successfully.');
+        insertData();
         StartServer();
     })
     .catch((error) => Logging.error(error));

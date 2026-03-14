@@ -1,6 +1,5 @@
 [
   {
-    "_id": "69f6a7b8c9d0e1f2a3b4c5d6",
     "customer_id": "65b2c3d4e5f6a7b8c9d0e1f2",
     "restaurant_id": "68e5f6a7b8c9d0e1f2a3b4c5",
     "date": "2024-06-14T21:30:00.000Z",
@@ -21,7 +20,6 @@
     "updatedAt": "2024-06-15T08:00:00.000Z"
   },
   {
-    "_id": "69f6a7b8c9d0e1f2a3b4c5d7",
     "customer_id": "65b2c3d4e5f6a7b8c9d0e1f3",
     "restaurant_id": "68e5f6a7b8c9d0e1f2a3b4c5",
     "date": "2024-05-20T20:00:00.000Z",
@@ -38,7 +36,6 @@
     "updatedAt": "2024-05-20T20:15:00.000Z"
   },
   {
-    "_id": "69f6a7b8c9d0e1f2a3b4c5d8",
     "customer_id": "65b2c3d4e5f6a7b8c9d0e1f2",
     "restaurant_id": "68e5f6a7b8c9d0e1f2a3b4c6",
     "date": "2024-04-10T13:00:00.000Z",

@@ -8,7 +8,7 @@ const router = express.Router();
  * @openapi
  * tags:
  *   - name: Customers
- *     description: CRUD endpoints for customers
+ *     description: CRUD endpoints for customers.
  *
  * components:
  *   schemas:
@@ -61,7 +61,7 @@ const router = express.Router();
  *           example:
  *             - "65f1c2a1b2c3d4e5f6789014"
  *             - "65f1c2a1b2c3d4e5f6789015"
- * favoriteRestaurants:
+ *         favoriteRestaurants:
  *           type: array
  *           items:
  *             type: string
@@ -125,24 +125,6 @@ const router = express.Router();
  *             type: string
  */
 
-/**
- * @openapi
- * /customers:
- *   post:
- *     summary: Creates a customer
- *     tags: [Customers]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/CustomerCreateUpdate'
- *     responses:
- *       201:
- *         description: Created
- *       422:
- *         description: Validation failed (Joi)
- */
 router.post('/', ValidateJoi(Schemas.customer.create), controller.createCustomer);
 
 /**

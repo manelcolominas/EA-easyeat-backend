@@ -1,58 +1,71 @@
 import { NextFunction, Request, Response } from 'express';
-import mongoose from 'mongoose';
-import CustomerService from '../services/customer';
+import VisitService from '../services/visit';
 
-const createCustomer = async (req: Request, res: Response, next: NextFunction) => {
-   
-
+const createVisit = async (req: Request, res: Response, next: NextFunction) => {
     try {
-       const savedCustomer = await CustomerService.createCustomer(req.body);
-        return res.status(201).json(savedCustomer);
+        const savedVisit = await VisitService.createVisit(req.body);
+        return res.status(201).json(savedVisit);
     } catch (error) {
         return res.status(500).json({ error });
     }
 };
 
-const readCustomer = async (req: Request, res: Response, next: NextFunction) => {
-    const customerId = req.params.CustomerId;
+const readVisit = async (req: Request, res: Response, next: NextFunction) => {
+    const visitId = req.params.visitId;
 
     try {
-        const customer = await CustomerService.getCustomer(customerId);
-        return customer ? res.status(200).json(customer) : res.status(404).json({ message: 'not found' });
+        const visit = await VisitService.getVisit(visitId);
+        return visit ? res.status(200).json(visit) : res.status(404).json({ message: 'not found' });
     } catch (error) {
         return res.status(500).json({ error });
     }
 };
 
 const readAll = async (req: Request, res: Response, next: NextFunction) => {
+    const { customer_id, restaurant_id } = req.query;
+
     try {
-        const customers = await CustomerService.getAllCustomers();
-        return res.status(200).json(customers);
+        const visits = await VisitService.getAllVisits({
+            customer_id: customer_id as string | undefined,
+            restaurant_id: restaurant_id as string | undefined
+        });
+        return res.status(200).json(visits);
     } catch (error) {
         return res.status(500).json({ error });
     }
 };
 
-const updateCustomer = async (req: Request, res: Response, next: NextFunction) => {
-    const customerId = req.params.customerId;
+const getVisitFull = async (req: Request, res: Response, next: NextFunction) => {
+    const visitId = req.params.visitId;
+
     try {
-        const updatedCustomer = await CustomerService.updateCustomer(customerId, req.body);
-        return updatedCustomer ? res.status(201).json(updatedCustomer) : res.status(404).json({ message: 'not found' });
+        const visit = await VisitService.getVisitFull(visitId);
+        return visit ? res.status(200).json(visit) : res.status(404).json({ message: 'not found' });
     } catch (error) {
         return res.status(500).json({ error });
     }
 };
 
-
-const deleteCustomer = async (req: Request, res: Response, next: NextFunction) => {
-    const customerId = req.params.customerId;
+const updateVisit = async (req: Request, res: Response, next: NextFunction) => {
+    const visitId = req.params.visitId;
 
     try {
-        const customer = await CustomerService.deleteCustomer(customerId);
-        return customer ? res.status(201).json(customer) : res.status(404).json({ message: 'not found' });
+        const updatedVisit = await VisitService.updateVisit(visitId, req.body);
+        return updatedVisit ? res.status(200).json(updatedVisit) : res.status(404).json({ message: 'not found' });
     } catch (error) {
         return res.status(500).json({ error });
     }
 };
 
-export default { createCustomer, readCustomer, readAll, updateCustomer, deleteCustomer };
+const deleteVisit = async (req: Request, res: Response, next: NextFunction) => {
+    const visitId = req.params.visitId;
+
+    try {
+        const visit = await VisitService.deleteVisit(visitId);
+        return visit ? res.status(200).json(visit) : res.status(404).json({ message: 'not found' });
+    } catch (error) {
+        return res.status(500).json({ error });
+    }
+};
+
+export default { createVisit, readVisit, readAll, getVisitFull, updateVisit, deleteVisit };

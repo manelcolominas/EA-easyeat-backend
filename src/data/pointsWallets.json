@@ -1,6 +1,5 @@
 [
   {
-    "_id": "66c3d4e5f6a7b8c9d0e1f2a3",
     "customer_id": "65b2c3d4e5f6a7b8c9d0e1f2",
     "restaurant_id": "68e5f6a7b8c9d0e1f2a3b4c5",
     "points": 850,
@@ -8,7 +7,6 @@
     "updatedAt": "2024-06-15T09:45:00.000Z"
   },
   {
-    "_id": "66c3d4e5f6a7b8c9d0e1f2a4",
     "customer_id": "65b2c3d4e5f6a7b8c9d0e1f2",
     "restaurant_id": "68e5f6a7b8c9d0e1f2a3b4c6",
     "points": 120,
@@ -16,7 +14,6 @@
     "updatedAt": "2024-05-20T20:30:00.000Z"
   },
   {
-    "_id": "66c3d4e5f6a7b8c9d0e1f2a5",
     "customer_id": "65b2c3d4e5f6a7b8c9d0e1f3",
     "restaurant_id": "68e5f6a7b8c9d0e1f2a3b4c5",
     "points": 0,

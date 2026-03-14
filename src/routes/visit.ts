@@ -1,5 +1,5 @@
 import express from 'express';
-import controller from '../controllers/customer';
+import controller from '../controllers/visit';
 import { Schemas, ValidateJoi } from '../middleware/joi';
 
 const router = express.Router();
@@ -7,225 +7,225 @@ const router = express.Router();
 /**
  * @openapi
  * tags:
- *   - name: Customers
- *     description: CRUD endpoints for customers
+ *   - name: Visits
+ *     description: CRUD endpoints for visits
  *
  * components:
  *   schemas:
- *     PointsWallet:
- *       type: object
- *       required:
- *         - restaurant_id
- *         - points
- *       properties:
- *         restaurant_id:
- *           type: string
- *           description: Restaurant ObjectId
- *           example: "65f1c2a1b2c3d4e5f6789013"
- *         points:
- *           type: number
- *           example: 120
- * 
- *     Customer:
+ *     Visit:
  *       type: object
  *       properties:
  *         _id:
  *           type: string
  *           description: MongoDB ObjectId
  *           example: "65f1c2a1b2c3d4e5f6789012"
- *         name:
+ *         customer_id:
  *           type: string
- *           example: "Nizar"
- *         email:
+ *           description: Customer ObjectId
+ *           example: "65f1c2a1b2c3d4e5f6789013"
+ *         restaurant_id:
  *           type: string
- *           example: "nizar@gmail.com"
- *         passwordHash:
+ *           description: Restaurant ObjectId
+ *           example: "65f1c2a1b2c3d4e5f6789014"
+ *         date:
  *           type: string
- *           example: "$2b$10$abcdefghijklmnopqrstuv"
- *         profilePictures:
- *           type: array
- *           items:
- *             type: string
- *           example:
- *             - "https://example.com/profile1.jpg"
- *             - "https://example.com/profile2.jpg"
- *         pointsWallet:
- *           type: array
- *           items:
- *             $ref: '#/components/schemas/PointsWallet'
- *         visitHistory:
- *           type: array
- *           items:
- *             type: string
- *           description: Array of Visit ObjectIds
- *           example:
- *             - "65f1c2a1b2c3d4e5f6789014"
- *             - "65f1c2a1b2c3d4e5f6789015"
- * favoriteRestaurants:
- *           type: array
- *           items:
- *             type: string
- *           description: Array of Restaurant ObjectIds
- *           example:
- *             - "65f1c2a1b2c3d4e5f6789016"
- *             - "65f1c2a1b2c3d4e5f6789017"
- *         badges:
- *           type: array
- *           items:
- *             type: string
- *           description: Array of BadgeCustomer ObjectIds
- *           example:
- *             - "65f1c2a1b2c3d4e5f6789018"
- *         reviews:
- *           type: array
- *           items:
- *             type: string
- *           description: Array of Review ObjectIds
- *           example:
- *             - "65f1c2a1b2c3d4e5f6789019"
- * 
- *     CustomerCreateUpdate:
+ *           format: date-time
+ *           example: "2024-03-14T10:00:00.000Z"
+ *         pointsEarned:
+ *           type: number
+ *           example: 10
+ *         billAmount:
+ *           type: number
+ *           example: 31.00
+ *     VisitCreate:
  *       type: object
  *       required:
- *         - name
- *         - email
+ *         - customer_id
+ *         - restaurant_id
  *       properties:
- *         name:
+ *         customer_id:
  *           type: string
- *           example: "Nizar"
- *         email:
+ *           example: "65f1c2a1b2c3d4e5f6789013"
+ *         restaurant_id:
  *           type: string
- *           example: "nizar@gmail.com"
- *         passwordHash:
+ *           example: "65f1c2a1b2c3d4e5f6789014"
+ *         date:
  *           type: string
- *           example: "$2b$10$abcdefghijklmnopqrstuv"
- *         profilePictures:
- *           type: array
- *           items:
- *             type: string
- *         pointsWallet:
- *           type: array
- *           items:
- *             $ref: '#/components/schemas/PointsWallet'
- *         visitHistory:
- *           type: array
- *           items:
- *             type: string
- *         favoriteRestaurants:
- *           type: array
- *           items:
- *             type: string
- *         badges:
- *           type: array
- *           items:
- *             type: string
- *         reviews:
- *           type: array
- *           items:
- *             type: string
+ *           format: date-time
+ *           example: "2024-03-14T10:00:00.000Z"
+ *         pointsEarned:
+ *           type: number
+ *           example: 10
+ *         billAmount:
+ *           type: number
+ *           example: 31.00
+ *     VisitUpdate:
+ *       type: object
+ *       properties:
+ *         date:
+ *           type: string
+ *           format: date-time
+ *         pointsEarned:
+ *           type: number
+ *         billAmount:
+ *           type: number
  */
 
 /**
  * @openapi
- * /customers:
+ * /visits:
  *   post:
- *     summary: Creates a customer
- *     tags: [Customers]
+ *     summary: Creates a visit
+ *     tags: [Visits]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/CustomerCreateUpdate'
+ *             $ref: '#/components/schemas/VisitCreate'
  *     responses:
  *       201:
  *         description: Created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Visit'
  *       422:
  *         description: Validation failed (Joi)
  */
-router.post('/', ValidateJoi(Schemas.customer.create), controller.createCustomer);
+router.post('/', ValidateJoi(Schemas.visit.create), controller.createVisit);
 
 /**
  * @openapi
- * /customers/{customerId}:
+ * /visits:
  *   get:
- *     summary: Gets a customer by ID
- *     tags: [Customers]
+ *     summary: Lists all visits
+ *     tags: [Visits]
  *     parameters:
- *       - in: path
- *         name: customerId
- *         required: true
+ *       - in: query
+ *         name: customer_id
  *         schema:
  *           type: string
- *         description: The customer's ObjectId
+ *         description: Filter by customer ObjectId
+ *       - in: query
+ *         name: restaurant_id
+ *         schema:
+ *           type: string
+ *         description: Filter by restaurant ObjectId
  *     responses:
  *       200:
  *         description: OK
- *       404:
- *         description: Not found
- */
-router.get('/:customerId', controller.readCustomer);
-
-/**
- * @openapi
- * /customers:
- *   get:
- *     summary: Lists all customers
- *     tags: [Customers]
- *     responses:
- *       200:
- *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Visit'
  */
 router.get('/', controller.readAll);
 
 /**
  * @openapi
- * /customers/{customerId}:
- *   put:
- *     summary: Updates a customer by ID
- *     tags: [Customers]
+ * /visits/{visitId}:
+ *   get:
+ *     summary: Gets a visit by ID
+ *     tags: [Visits]
  *     parameters:
  *       - in: path
- *         name: customerId
+ *         name: visitId
  *         required: true
  *         schema:
  *           type: string
- *         description: The customer's ObjectId
+ *         description: The visit's ObjectId
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Visit'
+ *       404:
+ *         description: Visit not found
+ */
+router.get('/:visitId', controller.readVisit);
+
+/**
+ * @openapi
+ * /visits/{visitId}/full:
+ *   get:
+ *     summary: Gets a visit with all populated fields (customer, restaurant)
+ *     tags: [Visits]
+ *     parameters:
+ *       - in: path
+ *         name: visitId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The visit's ObjectId
+ *     responses:
+ *       200:
+ *         description: Visit with populated relations
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Visit'
+ *       404:
+ *         description: Visit not found
+ */
+router.get('/:visitId/full', controller.getVisitFull);
+
+/**
+ * @openapi
+ * /visits/{visitId}:
+ *   put:
+ *     summary: Updates a visit by ID
+ *     tags: [Visits]
+ *     parameters:
+ *       - in: path
+ *         name: visitId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The visit's ObjectId
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/CustomerCreateUpdate'
+ *             $ref: '#/components/schemas/VisitUpdate'
  *     responses:
- *       201:
- *         description: Updated
+ *       200:
+ *         description: Updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Visit'
  *       404:
- *         description: Not found
+ *         description: Visit not found
  *       422:
  *         description: Validation failed (Joi)
  */
-router.put('/:customerId', ValidateJoi(Schemas.customer.update), controller.updateCustomer);
+router.put('/:visitId', ValidateJoi(Schemas.visit.update), controller.updateVisit);
 
 /**
  * @openapi
- * /customers/{customerId}:
+ * /visits/{visitId}:
  *   delete:
- *     summary: Deletes a customer by ID
- *     tags: [Customers]
+ *     summary: Deletes a visit by ID
+ *     tags: [Visits]
  *     parameters:
  *       - in: path
- *         name: customerId
+ *         name: visitId
  *         required: true
  *         schema:
  *           type: string
- *         description: The customer's ObjectId
+ *         description: The visit's ObjectId
  *     responses:
  *       200:
- *         description: OK
+ *         description: Successfully deleted
  *       404:
- *         description: Not found
+ *         description: Visit not found
  */
-router.delete('/:customerId', controller.deleteCustomer);
+router.delete('/:visitId', controller.deleteVisit);
 
 export default router;

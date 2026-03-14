@@ -1,6 +1,5 @@
 [
   {
-    "_id": "68e5f6a7b8c9d0e1f2a3b4c5",
     "profile": {
       "name": "La Bodega del Mar",
       "description": "Traditional Mediterranean seafood restaurant with a modern twist.",
@@ -50,7 +49,6 @@
     "updatedAt": "2024-06-15T10:00:00.000Z"
   },
   {
-    "_id": "68e5f6a7b8c9d0e1f2a3b4c6",
     "profile": {
       "name": "Tokyo Ramen House",
       "description": "Authentic Japanese ramen, crafted with 20-hour broth.",

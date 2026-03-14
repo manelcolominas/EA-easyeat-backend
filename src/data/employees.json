@@ -1,6 +1,5 @@
 [
   {
-    "_id": "70a1b2c3d4e5f6a7b8c9d0e1",
     "restaurant_id": "68e5f6a7b8c9d0e1f2a3b4c5",
     "profile": {
       "name": "Carlos Martínez",
@@ -14,7 +13,6 @@
     "updatedAt": "2024-01-01T00:00:00.000Z"
   },
   {
-    "_id": "70a1b2c3d4e5f6a7b8c9d0e2",
     "restaurant_id": "68e5f6a7b8c9d0e1f2a3b4c5",
     "profile": {
       "name": "Ana López",
@@ -28,7 +26,6 @@
     "updatedAt": "2024-01-10T09:00:00.000Z"
   },
   {
-    "_id": "70a1b2c3d4e5f6a7b8c9d0e3",
     "restaurant_id": "68e5f6a7b8c9d0e1f2a3b4c6",
     "profile": {
       "name": "Miquel Roca",
