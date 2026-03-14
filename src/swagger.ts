@@ -6,9 +6,9 @@ const options: Options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'EA Sem5 API',
+      title: 'EASY-EAT API',
       version: '1.0.0',
-      description: 'REST API for Restaurants and Users',
+      description: 'REST API for Restaurants and Customers',
     },
     servers: [
       {
